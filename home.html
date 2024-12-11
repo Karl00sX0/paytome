@@ -48,7 +48,6 @@
 
     .paypal-button-container {
       margin-top: 20px;
-      display: none; /* Initially hidden */
     }
   </style>
 </head>
@@ -65,16 +64,7 @@
     const amountInput = document.getElementById('donation-amount');
     const paypalButtonContainer = document.getElementById('paypal-button-container');
 
-    // Show PayPal button only when a valid amount is entered
-    amountInput.addEventListener('input', function () {
-      if (amountInput.value > 0) {
-        paypalButtonContainer.style.display = 'block';
-      } else {
-        paypalButtonContainer.style.display = 'none';
-      }
-    });
-
-    // Initialize PayPal Buttons
+    // Show PayPal button dynamically when a valid amount is entered
     paypal.Buttons({
       createOrder: function (data, actions) {
         const amount = amountInput.value;
@@ -85,7 +75,7 @@
         return actions.order.create({
           purchase_units: [{
             amount: {
-              value: amount // Use the amount entered by the user
+              value: amount
             }
           }]
         });
@@ -100,6 +90,16 @@
         alert('An error occurred during the transaction.');
       }
     }).render('#paypal-button-container');
+
+    // Show PayPal button only when a valid amount is entered
+    amountInput.addEventListener('input', function () {
+      const amount = parseFloat(amountInput.value);
+      if (amount > 0) {
+        paypalButtonContainer.style.display = 'block';
+      } else {
+        paypalButtonContainer.style.display = 'none';
+      }
+    });
   </script>
 </body>
 </html>
