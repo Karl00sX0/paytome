@@ -25,6 +25,13 @@
       width: 300px;
     }
 
+    .donation-box img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin-bottom: 20px;
+    }
+
     .donation-box h1 {
       font-size: 24px;
       color: #333;
@@ -41,22 +48,36 @@
 
     .paypal-button-container {
       margin-top: 20px;
+      display: none; /* Initially hidden */
     }
   </style>
 </head>
 <body>
   <div class="donation-box">
+    <img src="https://via.placeholder.com/300x150" alt="Support Us">
     <h1>Support Us</h1>
     <input id="donation-amount" type="number" class="amount-input" placeholder="Enter amount (USD)">
     <div id="paypal-button-container" class="paypal-button-container"></div>
   </div>
 
-  <script src="https://www.paypal.com/sdk/js?client-id=EHA2LqiyWPMuKEZ9cJJbMP9eDsWYRPfhzuC-2Dj2X4QcIyU7V25DfO63NJFmQ4xdwx7iNu7kwuIdKuuj=USD"></script>
+  <script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&currency=USD"></script>
   <script>
+    const amountInput = document.getElementById('donation-amount');
+    const paypalButtonContainer = document.getElementById('paypal-button-container');
+
+    // Show PayPal button only when a valid amount is entered
+    amountInput.addEventListener('input', function () {
+      if (amountInput.value > 0) {
+        paypalButtonContainer.style.display = 'block';
+      } else {
+        paypalButtonContainer.style.display = 'none';
+      }
+    });
+
     // Initialize PayPal Buttons
     paypal.Buttons({
       createOrder: function (data, actions) {
-        const amount = document.getElementById('donation-amount').value;
+        const amount = amountInput.value;
         if (!amount || amount <= 0) {
           alert('Please enter a valid donation amount.');
           return;
