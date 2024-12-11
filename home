@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PayPal Donation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .donation-box {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 300px;
+    }
+
+    .donation-box h1 {
+      font-size: 24px;
+      color: #333;
+    }
+
+    .amount-input {
+      margin: 20px 0;
+      padding: 10px;
+      font-size: 18px;
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+
+    .paypal-button-container {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="donation-box">
+    <h1>Support Us</h1>
+    <input id="donation-amount" type="number" class="amount-input" placeholder="Enter amount (USD)">
+    <div id="paypal-button-container" class="paypal-button-container"></div>
+  </div>
+
+  <script src="https://www.paypal.com/sdk/js?client-id=EHA2LqiyWPMuKEZ9cJJbMP9eDsWYRPfhzuC-2Dj2X4QcIyU7V25DfO63NJFmQ4xdwx7iNu7kwuIdKuuj=USD"></script>
+  <script>
+    // Initialize PayPal Buttons
+    paypal.Buttons({
+      createOrder: function (data, actions) {
+        const amount = document.getElementById('donation-amount').value;
+        if (!amount || amount <= 0) {
+          alert('Please enter a valid donation amount.');
+          return;
+        }
+        return actions.order.create({
+          purchase_units: [{
+            amount: {
+              value: amount // Use the amount entered by the user
+            }
+          }]
+        });
+      },
+      onApprove: function (data, actions) {
+        return actions.order.capture().then(function (details) {
+          alert('Thank you for your donation, ' + details.payer.name.given_name + '!');
+        });
+      },
+      onError: function (err) {
+        console.error(err);
+        alert('An error occurred during the transaction.');
+      }
+    }).render('#paypal-button-container');
+  </script>
+</body>
+</html>
