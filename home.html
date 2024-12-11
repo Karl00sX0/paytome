@@ -48,7 +48,7 @@
 
     .paypal-button-container {
       margin-top: 20px;
-      display: none; /* Initially hidden */
+      display: none; /* مخفي بشكل افتراضي */
     }
   </style>
 </head>
@@ -65,15 +65,15 @@
     const amountInput = document.getElementById('donation-amount');
     const paypalButtonContainer = document.getElementById('paypal-button-container');
 
-    // Function to render PayPal button
+    // وظيفة إنشاء زر PayPal
     function renderPayPalButton(amount) {
-      paypalButtonContainer.innerHTML = ''; // Clear previous buttons
+      paypalButtonContainer.innerHTML = ''; // حذف أي زر سابق
       paypal.Buttons({
         createOrder: function (data, actions) {
           return actions.order.create({
             purchase_units: [{
               amount: {
-                value: amount // Use the entered amount
+                value: amount // استخدام المبلغ المدخل
               }
             }]
           });
@@ -90,12 +90,12 @@
       }).render('#paypal-button-container');
     }
 
-    // Show PayPal button when valid amount is entered
+    // عرض الزر عند إدخال مبلغ صالح
     amountInput.addEventListener('input', function () {
       const amount = parseFloat(amountInput.value);
       if (amount > 0) {
         paypalButtonContainer.style.display = 'block';
-        renderPayPalButton(amount); // Re-render button with the new amount
+        renderPayPalButton(amount); // إعادة إنشاء الزر مع المبلغ الجديد
       } else {
         paypalButtonContainer.style.display = 'none';
       }
